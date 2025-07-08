@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { Nav } from "react-bootstrap";
+import { Context1 } from './../App.js';
 
 // class Detail2 extend React.Component {
 //   componentDidMount(){
@@ -15,9 +17,13 @@ import { useParams } from "react-router-dom";
 
 function Detail(props) {
 
+  let { stock } = useContext(Context1)
+
   let [count, setCount] = useState(0);
   let [alert, setDisplay] = useState(true);
   let [text, setText] = useState('');
+  let [tab, setTab] = useState(0);
+  let [fade2, setFade2] = useState('');
 
   useEffect(()=> {
     let a = setTimeout( () => { setDisplay(false) }, 2000 )
@@ -30,6 +36,12 @@ function Detail(props) {
     }
   })
   
+  useEffect(()=> {
+    setFade2('end')
+    return () => {
+      setFade2('');
+    }
+  },[])
 
 
   let {id} = useParams();
@@ -38,7 +50,7 @@ function Detail(props) {
 
   
   return (
-    <div className="container">
+    <div className={`container start ${fade2}`}>
       {
         alert == true ?
         <div className="alert alert-warning">
@@ -69,8 +81,47 @@ function Detail(props) {
           <button className="btn btn-danger">주문하기</button> 
         </div>
       </div>
+
+
+      <Nav variant="tabs" defaultActiveKey="link0">
+        <Nav.Item>
+          <Nav.Link eventKey="link0" onClick={()=>{ setTab(0) }}>버튼0</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link1" onClick={()=>{ setTab(1) }}>버튼1</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link2" onClick={()=>{ setTab(2) }}>버튼2</Nav.Link>
+        </Nav.Item>
+      </Nav>
+
+      <TabContent tab={tab} shoes={props.shoes}/>
+
     </div> 
   );
 }
+
+function TabContent({tab, shoes}) {
+
+  let [fade, setFade] = useState('')
+  let {stock} = useContext(Context1);
+
+  useEffect(() => {
+
+    let a = setTimeout(() => { setFade('end') }, 100)
+
+    return () => {
+      clearTimeout(a)
+      setFade('')
+    }
+  }, [tab])
+  //automatic batching
+  return( 
+    <div className={'start '+fade}>
+      {[<div className="start end">{shoes[0].title}</div>,<div>{ stock[1] }</div>,<div>내용2</div>][tab]}
+    </div>
+  )
+}
+
 
 export default Detail;

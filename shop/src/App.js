@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import { Navbar,Container,Nav,Row,Col } from 'react-bootstrap';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,6 +8,7 @@ import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail.js';
 import styled from 'styled-components';
 import axios from "axios";
+export let Context1 = createContext();
 
 let YellowBtn = styled.button`
   background: ${ props => props.bg };
@@ -20,12 +21,14 @@ let Box = styled.div`
 `
 
 function App() {
-
+  
+  let [stock] = useState([10, 11, 12])
   let [shoes, setShoes] = useState(data);
   let [cnt, addCnt] = useState(0);
   let [isLoading, setLoading] = useState(false);
   let [moreBtn, setMoreBtn] = useState(true)
   let navigate = useNavigate();
+  
 
   return (
     <div className="App">
@@ -120,7 +123,11 @@ function App() {
         }
       </>
     } /> 
-        <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
+        <Route path="/detail/:id" element={
+          <Context1.Provider value={{ stock }}>
+            <Detail shoes={shoes}/>
+          </Context1.Provider>
+          } />
 
 
         <Route path="/about" element={<About/>}>
