@@ -82,16 +82,11 @@ function App() {
         { 
           moreBtn ? 
           <button onClick={()=>{
-          // axios.get('https://codingapple1.github.io/shop/data2.json')
-          // .then((d)=>{
-          //   let c = [...shoes, ...d.data];
-          //   setShoes(c);
-          // })
-          // .catch(() => {
-          //   console.log('실패함')
-          // })
-          isLoading ? setLoading(isLoading) : setLoading(!isLoading);
-          Promise.all([axios.get('https://codingapple1.github.io/shop/data2.json'), axios.get('https://codingapple1.github.io/shop/data3.json')])
+          const URL1 = process.env.REACT_APP_API_URL1;
+          const URL2 = process.env.REACT_APP_API_URL2;
+
+          setLoading(isLoading => !isLoading);
+          Promise.all([axios.get(URL1), axios.get(URL2)])
           .then(
             (res) => { //배열로 반환
               addCnt(cnt+1);
@@ -108,13 +103,12 @@ function App() {
                 setMoreBtn(false);
               }
               
-
-              isLoading ? setLoading(!isLoading) : setLoading(isLoading);
+              setLoading(isLoading => !isLoading);
             }
           )
           .catch(
             (err)=> {
-              isLoading ? setLoading(isLoading) : setLoading(!isLoading);
+              setLoading(isLoading => !isLoading);
               console.log('error: '+err);
             }
           )
