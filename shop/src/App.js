@@ -8,7 +8,10 @@ import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail.js';
 import styled from 'styled-components';
 import axios from "axios";
+import Cart from './pages/Cart.js'
+
 export let Context1 = createContext();
+
 
 let YellowBtn = styled.button`
   background: ${ props => props.bg };
@@ -123,6 +126,7 @@ function App() {
           </Context1.Provider>
           } />
 
+        <Route path="/cart" element={<Cart/>}/>
 
         <Route path="/about" element={<About/>}>
           <Route path="member" element={<div>멤버임.</div>} />
